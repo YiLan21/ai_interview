@@ -34,16 +34,17 @@ const features = [
     ),
   },
   {
-    title: "免費且免安裝",
+    title: "BYOK，費用透明",
     description:
-      "開啟瀏覽器即可使用，不需註冊帳號、不需付費，隨時隨地開始準備。",
+      "使用你自己的 OpenAI API Key，實際費用依 OpenAI 帳戶用量計算，本服務不加價、不代收費用。",
     icon: (
       <path d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V6m0 2v8m0 0v2m0-2c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
     ),
   },
   {
-    title: "隱私優先",
-    description: "面試內容僅用於當次流程產生回饋，不會被用於其他用途。",
+    title: "金鑰只存在你的瀏覽器",
+    description:
+      "API Key 儲存於瀏覽器 localStorage，僅在呼叫面試 API 時隨請求送出，伺服器不會保存或記錄。",
     icon: (
       <path d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
     ),
@@ -72,11 +73,19 @@ const steps = [
 const faqs = [
   {
     q: "使用這個服務需要付費嗎？",
-    a: "不需要，AI 面試模擬器目前完全免費使用，無需訂閱或付費。",
+    a: "AI 面試模擬器本身免費使用，無需訂閱。但服務採用 BYOK 模式，你需要提供自己的 OpenAI API Key，實際使用費用依 OpenAI 帳戶用量計算。",
+  },
+  {
+    q: "為什麼需要自己的 OpenAI API Key？",
+    a: "BYOK（Bring Your Own Key）讓你直接以自己的帳戶付費使用 AI 模型，費用透明、用量可控，我們不會加價或代收費用。",
+  },
+  {
+    q: "我的 API Key 安全嗎？",
+    a: "金鑰只會儲存在你瀏覽器的 localStorage，僅在呼叫面試 API 時隨請求送出，伺服器不會保存或記錄你的金鑰。",
   },
   {
     q: "需要註冊帳號才能使用嗎？",
-    a: "不需要，開啟頁面貼上職缺描述即可立即開始模擬面試。",
+    a: "不需要，於「API 設定」頁面貼上你的 OpenAI API Key 後即可立即開始模擬面試。",
   },
   {
     q: "支援哪些類型的職缺？",
@@ -105,7 +114,7 @@ export default function LandingPage() {
             <div>
               <span className="inline-flex items-center gap-2 rounded-full border border-black/[.08] bg-white px-3.5 py-1.5 text-xs font-medium text-zinc-600 shadow-sm dark:border-white/[.1] dark:bg-zinc-900 dark:text-zinc-300">
                 <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
-                AI 驅動．完全免費
+                AI 驅動．BYOK 自備金鑰
               </span>
 
               <h1 className="mt-6 text-4xl font-semibold leading-tight tracking-tight text-zinc-950 sm:text-5xl sm:leading-tight dark:text-zinc-50">
@@ -116,7 +125,8 @@ export default function LandingPage() {
 
               <p className="mt-6 max-w-lg text-base leading-relaxed text-zinc-600 sm:text-lg dark:text-zinc-400">
                 貼上職缺描述，AI
-                會依內容量身設計面試問題、進行對話式模擬面試，並在結束後給你具體的評分與改進建議。
+                會依內容量身設計面試問題、進行對話式模擬面試，並在結束後給你具體的評分與改進建議。採用
+                BYOK 模式，使用你自己的 OpenAI API Key，費用透明可控。
               </p>
 
               <div className="mt-8 flex flex-col gap-3 sm:flex-row">
@@ -153,10 +163,10 @@ export default function LandingPage() {
                 </div>
                 <div>
                   <dt className="text-2xl font-semibold text-zinc-950 dark:text-zinc-50">
-                    免費
+                    BYOK
                   </dt>
                   <dd className="mt-1 text-xs text-zinc-500 dark:text-zinc-400">
-                    無需註冊即可使用
+                    自備 OpenAI API Key
                   </dd>
                 </div>
               </dl>
@@ -355,13 +365,14 @@ export default function LandingPage() {
             準備好進行下一場面試了嗎？
           </h2>
           <p className="relative mx-auto mt-3 max-w-md text-sm text-background/70 sm:text-base">
-            現在就開始你的第一場 AI 模擬面試，免費、免註冊，3 分鐘立即上手。
+            現在就開始你的第一場 AI 模擬面試，免註冊，帶上你的 OpenAI API
+            Key，3 分鐘立即上手。
           </p>
           <Link
             href="/interview"
             className="relative mt-8 inline-flex items-center justify-center rounded-full bg-background px-8 py-3.5 text-sm font-medium text-foreground transition-opacity hover:opacity-90"
           >
-            免費開始模擬面試
+            開始模擬面試
           </Link>
         </div>
       </section>

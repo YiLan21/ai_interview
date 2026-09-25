@@ -2,6 +2,7 @@ const productLinks = [
   { href: "/#features", label: "服務特色" },
   { href: "/#how-it-works", label: "使用流程" },
   { href: "/#faq", label: "常見問題" },
+  { href: "/settings", label: "API 設定" },
   { href: "/interview", label: "開始模擬面試" },
 ];
 

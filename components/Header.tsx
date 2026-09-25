@@ -40,12 +40,18 @@ export default function Header() {
           ))}
         </nav>
 
-        <div className="hidden md:block">
+        <div className="hidden items-center gap-3 md:flex">
+          <Link
+            href="/settings"
+            className="rounded-full border border-black/[.1] px-4 py-2.5 text-sm font-medium text-zinc-600 transition-colors hover:bg-black/[.04] dark:border-white/[.15] dark:text-zinc-300 dark:hover:bg-white/[.06]"
+          >
+            API 設定
+          </Link>
           <Link
             href="/interview"
             className="rounded-full bg-foreground px-5 py-2.5 text-sm font-medium text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc]"
           >
-            免費開始模擬
+            開始模擬面試
           </Link>
         </div>
 
@@ -98,11 +104,18 @@ export default function Header() {
               </a>
             ))}
             <Link
+              href="/settings"
+              onClick={() => setOpen(false)}
+              className="mt-2 rounded-lg px-3 py-2.5 text-sm font-medium text-zinc-600 transition-colors hover:bg-black/[.04] dark:text-zinc-300 dark:hover:bg-white/[.06]"
+            >
+              API 設定
+            </Link>
+            <Link
               href="/interview"
               onClick={() => setOpen(false)}
-              className="mt-2 rounded-full bg-foreground px-5 py-2.5 text-center text-sm font-medium text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc]"
+              className="mt-1 rounded-full bg-foreground px-5 py-2.5 text-center text-sm font-medium text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc]"
             >
-              免費開始模擬
+              開始模擬面試
             </Link>
           </nav>
         </div>

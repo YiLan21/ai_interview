@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useState, useRef, useEffect } from "react";
+import { useStoredOpenAIKey } from "@/lib/openaiKey";
 
 const TOTAL_QUESTIONS = 3;
 
@@ -18,6 +19,7 @@ export default function InterviewPage() {
   const [loading, setLoading] = useState(false);
   const [isComplete, setIsComplete] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const apiKey = useStoredOpenAIKey();
 
   const bottomRef = useRef<HTMLDivElement>(null);
 
@@ -28,12 +30,19 @@ export default function InterviewPage() {
   const answeredCount = messages.filter((m) => m.role === "user").length;
 
   async function callInterviewApi(nextMessages: ChatMessage[]) {
+    if (!apiKey.trim()) {
+      setError("請先在「API 設定」頁面輸入你的 OpenAI API Key。");
+      return;
+    }
     setLoading(true);
     setError(null);
     try {
       const res = await fetch("/api/interview", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          "x-openai-api-key": apiKey.trim(),
+        },
         body: JSON.stringify({ jobDescription, messages: nextMessages }),
       });
       const data = await res.json();
@@ -54,6 +63,10 @@ export default function InterviewPage() {
 
   async function handleStart() {
     if (!jobDescription.trim() || loading) return;
+    if (!apiKey.trim()) {
+      setError("請先在「API 設定」頁面輸入你的 OpenAI API Key。");
+      return;
+    }
     setStarted(true);
     await callInterviewApi([]);
   }
@@ -106,6 +119,20 @@ export default function InterviewPage() {
             貼上職缺描述，AI 面試官會依此提出 {TOTAL_QUESTIONS}{" "}
             題面試問題，回答完畢後給予評分與建議。
           </p>
+
+          {!apiKey.trim() && (
+            <div className="mt-4 rounded-lg border border-amber-300/60 bg-amber-50 px-4 py-3 text-sm text-amber-800 dark:border-amber-400/20 dark:bg-amber-400/10 dark:text-amber-300">
+              使用前請先前往{" "}
+              <Link
+                href="/settings"
+                className="font-medium underline underline-offset-2"
+              >
+                API 設定
+              </Link>{" "}
+              頁面輸入你的 OpenAI API Key（本服務採用 BYOK 模式）。
+            </div>
+          )}
+
           <textarea
             className="mt-6 h-48 w-full resize-none rounded-lg border border-black/[.1] bg-transparent p-3 text-sm text-zinc-950 outline-none focus:border-zinc-950 dark:border-white/[.15] dark:text-zinc-50 dark:focus:border-zinc-50"
             placeholder="請貼上職缺描述，例如：徵求前端工程師，需熟悉 React、TypeScript..."
@@ -120,7 +147,7 @@ export default function InterviewPage() {
           <button
             className="mt-4 w-full rounded-full bg-foreground px-5 py-3 text-sm font-medium text-background transition-colors hover:bg-[#383838] disabled:cursor-not-allowed disabled:opacity-50 dark:hover:bg-[#ccc]"
             onClick={handleStart}
-            disabled={!jobDescription.trim() || loading}
+            disabled={!jobDescription.trim() || !apiKey.trim() || loading}
           >
             {loading ? "面試官準備中..." : "開始面試"}
           </button>
@@ -146,12 +173,20 @@ export default function InterviewPage() {
                   )} / ${TOTAL_QUESTIONS} 題`}
             </p>
           </div>
-          <button
-            className="rounded-full border border-black/[.1] px-3 py-1.5 text-xs font-medium text-zinc-600 transition-colors hover:bg-black/[.04] dark:border-white/[.15] dark:text-zinc-300 dark:hover:bg-white/[.06]"
-            onClick={handleRestart}
-          >
-            重新開始
-          </button>
+          <div className="flex items-center gap-2">
+            <Link
+              href="/settings"
+              className="rounded-full border border-black/[.1] px-3 py-1.5 text-xs font-medium text-zinc-600 transition-colors hover:bg-black/[.04] dark:border-white/[.15] dark:text-zinc-300 dark:hover:bg-white/[.06]"
+            >
+              API 設定
+            </Link>
+            <button
+              className="rounded-full border border-black/[.1] px-3 py-1.5 text-xs font-medium text-zinc-600 transition-colors hover:bg-black/[.04] dark:border-white/[.15] dark:text-zinc-300 dark:hover:bg-white/[.06]"
+              onClick={handleRestart}
+            >
+              重新開始
+            </button>
+          </div>
         </div>
 
         <div className="flex-1 space-y-4 overflow-y-auto px-5 py-6">

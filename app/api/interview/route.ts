@@ -40,11 +40,11 @@ ${jobDescription}
 }
 
 export async function POST(request: Request) {
-  const apiKey = process.env.OPENAI_API_KEY;
+  const apiKey = request.headers.get("x-openai-api-key")?.trim();
   if (!apiKey) {
     return Response.json(
-      { error: "伺服器未設定 OPENAI_API_KEY，請確認 .env.local 設定。" },
-      { status: 500 }
+      { error: "請先在「API 設定」頁面輸入你的 OpenAI API Key。" },
+      { status: 401 }
     );
   }
 
@@ -93,6 +93,12 @@ export async function POST(request: Request) {
   }
 
   if (!res.ok) {
+    if (res.status === 401) {
+      return Response.json(
+        { error: "OpenAI API Key 無效，請至「API 設定」頁面確認並重新輸入。" },
+        { status: 401 }
+      );
+    }
     const errText = await res.text();
     return Response.json(
       { error: `OpenAI 回應錯誤: ${errText}` },
